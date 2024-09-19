@@ -40,5 +40,21 @@ export const useHoursStore = defineStore('hours', {
             }
             this.saveToLocal();
         },
+        updateEntry(entryId, data) {
+            this.hours.map(entry => {
+                if (entry.id === entryId){
+
+                    return data;
+                }
+            })
+            this.saveToLocal();
+        },
+        deleteEntry(entryId) {
+            this.hours = this.hours.filter(entry => entry.id !== entryId);
+            this.saveToLocal();
+        },
+        getHoursInfo(id) {
+            return this.hours.find(h=>h.id === parseInt(id));
+        },
     }
 })

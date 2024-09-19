@@ -11,7 +11,7 @@ export const useProjectsStore = defineStore('projects', {
             jiracode: '',
             type: ''
         },
-        projects: demo,
+        projects: examples,
     }),
     actions: {
       setProp(prop, value) {
@@ -39,21 +39,21 @@ export const useProjectsStore = defineStore('projects', {
 })
 
 
-const demo = [
+const examples = [
     {
       "id": 1713523206655,
-      "timecode": 101,
-      "workorder": '20310009-65',
-      "project": 20310009,
-      "description": "St1 Magento Rampdown eCommerce",
-      "jiracode": "MRE",
+      "timecode": 111,
+      "workorder": '123123-12',
+      "project": 123123,
+      "description": "Example Project",
+      "jiracode": "EXP",
       "type": "IMP",
     },
     {
       "id": 1713523206656,
-      "timecode": 101,
-      "workorder": '20310253-11',
-      "project": 20310253,
+      "timecode": 111,
+      "workorder": '321321-32',
+      "project": 321321,
       "jiracode": "",
       "description": "Other planning and admin work",
       "type": "SPDE",

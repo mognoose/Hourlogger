@@ -13,6 +13,11 @@
     @close="newHour = false"
     @submit="submit()"
   />
+  <EditModal
+    ref="editModal"
+    :id="editEntryId"
+    @close="editEntryId = ''"
+  />
   <KeyboardEvents @keydown="keyboardEvent" />
 
 </template>
@@ -21,6 +26,7 @@
 import Header from './components/Header.vue'
 import LoggedHours from './components/LoggedHours.vue'
 import LoggingModal from './components/LoggingModal.vue'
+import EditModal from './components/EditModal.vue'
 import KeyboardEvents from './components/KeyboardEvents.vue'
 import { ref, onMounted } from 'vue';
 import { useHoursStore } from './stores/hours';
@@ -28,6 +34,8 @@ import { useProjectsStore } from './stores/projects';
 
 const newHour = ref(false);
 const loggingModal = ref();
+const editModal = ref();
+const editEntryId = ref('');
 
 
 onMounted(() => {
@@ -47,7 +55,8 @@ const keyboardEvent = e => {
 }
 
 const onEdit = id => {
-  console.log('edit', id);
+  editEntryId.value = id.toString();
+  console.log('editEntryId', editEntryId.value);
 }
 </script>
 
@@ -61,5 +70,33 @@ header {
 
   scrollbar-color: #333 #222;
   scrollbar-width: thin;
+}
+
+
+.btn {
+    margin: 0 1rem ;
+    background-color: #555;
+    color: #eee;
+    border: 1px solid #111;
+    border-radius: .25rem;
+    padding: 1rem .25rem;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #4e9d4e;
+    color: #eee;
+}
+
+.btn-secondary {
+    background-color: #62686d;
+    color: #eee;
+}
+
+.btn-danger {
+    background-color: #be4c49;
+    color: #eee;
 }
 </style>

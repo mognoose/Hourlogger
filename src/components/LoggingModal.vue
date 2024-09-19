@@ -16,25 +16,27 @@
             </div>
             <div class="results" v-if="activated && step === 1">
                 <table>
-                    <tr
-                        class="result"
-                        :class="{active: index === selectedResult}"
-                        v-for="(result, index) in results"
-                        :key="index"
-                        @mouseover="selectedResult = index"
-                        @click="onSubmit()"
+                    <tbody>
+                        <tr
+                            class="result"
+                            :class="{active: index === selectedResult}"
+                            v-for="(result, index) in results"
+                            :key="index"
+                            @mouseover="selectedResult = index"
+                            @click="onSubmit()"
+                            >
+                            <td><span style="font-weight: bold;">{{result.description}}</span></td>
+                            <td><span v-if="result.jiracode">{{result.jiracode}}</span></td>
+                            <td><span>{{result.workorder}}</span></td>
+                        </tr>
+                        <tr
+                            @mouseover="selectedResult = 'new project'"
+                            @click="onSubmit()"
+                            :class="{active: 'new project' === selectedResult}"
                         >
-                        <td><span style="font-weight: bold;">{{result.description}}</span></td>
-                        <td><span v-if="result.jiracode">{{result.jiracode}}</span></td>
-                        <td><span>{{result.workorder}}</span></td>
-                    </tr>
-                    <tr
-                        @mouseover="selectedResult = 'new project'"
-                        @click="onSubmit()"
-                        :class="{active: 'new project' === selectedResult}"
-                    >
-                        <td colspan="3"><span style="font-weight: bold;">+ Add new project</span></td>
-                    </tr>
+                            <td colspan="3"><span style="font-weight: bold;">+ Add new project</span></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
