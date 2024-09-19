@@ -28,15 +28,6 @@ export const useHoursStore = defineStore('hours', {
         setProp(prop, value) {
             this.newHour[prop] = value;
         },
-        logTaskCode(code) {
-            this.newHour.task = code
-        },
-        logTaskDescription(description) {
-            this.newHour.description = description;
-        },
-        logTaskMinutes(minutes) {
-            this.newHour.minutes = minutes;
-        },
         submitEntry() {
             this.hours.push(this.newHour);
             this.newHour = {
