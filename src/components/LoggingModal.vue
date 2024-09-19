@@ -14,8 +14,6 @@
                     <path d="M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1 2.343 13.657ZM6.03 4.97a.751.751 0 0 0-1.042.018.751.751 0 0 0-.018 1.042L6.94 8 4.97 9.97a.749.749 0 0 0 .326 1.275.749.749 0 0 0 .734-.215L8 9.06l1.97 1.97a.749.749 0 0 0 1.275-.326.749.749 0 0 0-.215-.734L9.06 8l1.97-1.97a.749.749 0 0 0-.326-1.275.749.749 0 0 0-.734.215L8 6.94Z"></path>
                 </svg>
             </div>
-            <pre class="results" v-if="promptType === 'project'">{{useProjectsStore().newProject}}</pre>
-
             <div class="results" v-if="activated && step === 1">
                 <table>
                     <tr
@@ -61,8 +59,7 @@ const emits = defineEmits(['open', 'close', 'submit']);
 const promptRef = ref();
 const prompt = ref('');
 const promptType = ref('');
-const projects = useProjectsStore().projects;
-const results = ref(projects);
+const results = ref(useProjectsStore().projects);
 const selectedResult = ref(0);
 const step = ref(1);
 
@@ -77,10 +74,10 @@ const placeholder = [
 const placeholderProject = [
     '',
     '',
+    'Enter jiracode',
+    'Enter description',
     'Enter timecode',
     'Enter workorder',
-    'Enter description',
-    'Enter jiracode',
     'Enter type',
 ]
 
@@ -97,12 +94,13 @@ const onBackdropClick = event => {
 
 const filterResults = () => {
     emits('open');
-    results.value = projects.filter(p =>
+    results.value = useProjectsStore().projects.filter(p =>
         includes(p.description, prompt.value) ||
         includes(p.jiracode, prompt.value) ||
         includes(p.type, prompt.value) ||
         includes(p.workorder, prompt.value)
     );
+    if (results.value.length === 0) selectedResult.value = 'new project';
 }
 
 const suggestion = step => {
@@ -121,10 +119,10 @@ const onFocus = () => {
 
 const projectSteps = [
     '','',
+    'jiracode',
+    'description',
     'timecode',
     'workorder',
-    'description',
-    'jiracode',
     'type',
 ]
 
@@ -188,7 +186,7 @@ const parseHours = value => {
 
 const reset = () => {
     step.value = 1
-    results.value = projects;
+    results.value = useProjectsStore().projects;
     promptType.value = '';
 }
 
