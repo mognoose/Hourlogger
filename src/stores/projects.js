@@ -4,15 +4,34 @@ export const useProjectsStore = defineStore('projects', {
     state: () => ({
         newProject: {
             id: '',
+            timecode: '',
+            workorder: '',
             project: '',
-            task: '',
             description: '',
-            minutes: 60,
-            date: ''
+            jiracode: '',
+            type: ''
         },
         projects: demo,
     }),
     actions: {
+      setProp(prop, value) {
+        this.newProject[prop] = value;
+      },
+      submitProject() {
+        this.newProject.id = Date.now();
+        this.newProject.project = this.newProject.workorder.split('-')[0];
+        this.newProject.jiracode = this.newProject.jiracode.toUpperCase();
+        this.newProject.type = this.newProject.type.toUpperCase();
+        this.projects.push(this.newProject);
+        this.saveToLocal();
+      },
+      loadFromLocal() {
+        if(!window.localStorage.getItem('projects')) return;
+        this.projects = JSON.parse(window.localStorage.getItem('projects'));
+      },
+      saveToLocal() {
+          localStorage.setItem('projects', JSON.stringify(this.projects));
+      },
       getProjectInfo(project) {
         return this.projects.find(p => p.id === project)
       },

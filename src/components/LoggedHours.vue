@@ -11,14 +11,14 @@
         <th>Project description</th>
         </tr>
         <tr @click="emits('edit', entry.id)" v-for="(entry, index) in useHoursStore().hours" :key="index">
-            <td>{{useProjectsStore().getProjectInfo(entry.project).jiracode}}-{{entry.task}}</td>
+            <td>{{useProjectsStore().getProjectInfo(entry.project)?.jiracode}}-{{entry.task}}</td>
             <td>{{entry.description}}</td>
             <td>{{parseTime(entry.minutes)}}</td>
             <td>{{entry.date}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project).timecode}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project).workorder}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project).project}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project).description}}</td>
+            <td>{{useProjectsStore().getProjectInfo(entry.project)?.timecode}}</td>
+            <td>{{useProjectsStore().getProjectInfo(entry.project)?.workorder}}</td>
+            <td>{{useProjectsStore().getProjectInfo(entry.project)?.project}}</td>
+            <td>{{useProjectsStore().getProjectInfo(entry.project)?.description}}</td>
         </tr>
     </table>
 </template>

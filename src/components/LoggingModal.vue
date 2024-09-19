@@ -5,26 +5,39 @@
                 <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="icon search-icon">
                     <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
                 </svg>
-                <input ref="promptRef" v-model="prompt" :placeholder="placeholder[step]" autofocus @input="filterResults()" />
-                <span class="suggestion" v-if="step === 1">
+                <input ref="promptRef" v-model="prompt" :placeholder="promptType === 'project' ? placeholderProject[step] : placeholder[step]" autofocus @input="filterResults()" />
+                <span class="suggestion">
                     <span>{{prompt}}</span>
-                    <span>{{prompt ? `- ${results[0]?.description}` : ''}}</span>
-                </span>
-                <span class="suggestion" v-if="step === 2">
-                    <span>{{prompt}}</span>
-                    <span>{{prompt ? `- ${useProjectsStore().getProjectInfo(useHoursStore().newHour.project)?.jiracode}-${prompt}` : ''}}</span>
-                    <span>{{prompt ? ` - ${useProjectsStore().getProjectInfo(useHoursStore().newHour.project)?.description}` : ''}}</span>
+                    <span>{{prompt ? suggestion(step) : ''}}</span>
                 </span>
                 <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="icon x-circle-icon">
                     <path d="M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1 2.343 13.657ZM6.03 4.97a.751.751 0 0 0-1.042.018.751.751 0 0 0-.018 1.042L6.94 8 4.97 9.97a.749.749 0 0 0 .326 1.275.749.749 0 0 0 .734-.215L8 9.06l1.97 1.97a.749.749 0 0 0 1.275-.326.749.749 0 0 0-.215-.734L9.06 8l1.97-1.97a.749.749 0 0 0-.326-1.275.749.749 0 0 0-.734.215L8 6.94Z"></path>
                 </svg>
             </div>
+            <pre class="results" v-if="promptType === 'project'">{{useProjectsStore().newProject}}</pre>
+
             <div class="results" v-if="activated && step === 1">
-                <div class="result" v-for="(result, index) in results" :key="index">
-                    <span style="font-weight: bold;">{{result.description}}</span>
-                    <span v-if="result.jiracode">{{result.jiracode}}</span>
-                    <span>{{result.workorder}}</span>
-                </div>
+                <table>
+                    <tr
+                        class="result"
+                        :class="{active: index === selectedResult}"
+                        v-for="(result, index) in results"
+                        :key="index"
+                        @mouseover="selectedResult = index"
+                        @click="onSubmit()"
+                        >
+                        <td><span style="font-weight: bold;">{{result.description}}</span></td>
+                        <td><span v-if="result.jiracode">{{result.jiracode}}</span></td>
+                        <td><span>{{result.workorder}}</span></td>
+                    </tr>
+                    <tr
+                        @mouseover="selectedResult = 'new project'"
+                        @click="onSubmit()"
+                        :class="{active: 'new project' === selectedResult}"
+                    >
+                        <td colspan="3"><span style="font-weight: bold;">+ Add new project</span></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -45,10 +58,12 @@ const props = defineProps({
 
 const emits = defineEmits(['open', 'close', 'submit']);
 
-const prompt = ref('');
 const promptRef = ref();
+const prompt = ref('');
+const promptType = ref('');
 const projects = useProjectsStore().projects;
 const results = ref(projects);
+const selectedResult = ref(0);
 const step = ref(1);
 
 const placeholder = [
@@ -57,6 +72,16 @@ const placeholder = [
     'Enter task code',
     'Enter description',
     'How much time you spent on it (hours)',
+]
+
+const placeholderProject = [
+    '',
+    '',
+    'Enter timecode',
+    'Enter workorder',
+    'Enter description',
+    'Enter jiracode',
+    'Enter type',
 ]
 
 const onOpen = () => {
@@ -80,6 +105,12 @@ const filterResults = () => {
     );
 }
 
+const suggestion = step => {
+    if (step === 1 && promptType.value === 'project') return
+    if (step === 1) return `- ${results.value[selectedResult.value]?.description}`
+    if (step === 2) return `- ${useProjectsStore().getProjectInfo(useHoursStore().newHour.project)?.jiracode}-${prompt.value} - ${useProjectsStore().getProjectInfo(useHoursStore().newHour.project)?.description}`;
+}
+
 const includes = (prop, prompt) => {
     return prop.toUpperCase().includes(prompt.toUpperCase())
 }
@@ -88,17 +119,54 @@ const onFocus = () => {
     promptRef.value.focus();
 }
 
+const projectSteps = [
+    '','',
+    'timecode',
+    'workorder',
+    'description',
+    'jiracode',
+    'type',
+]
+
+const hourSteps = [
+    '','',
+    'task',
+    'description',
+    'minutes',
+]
+
 const onSubmit = () => {
-    if (step.value === 1) useHoursStore().logProject(results.value[0]);
-    if (step.value === 2) useHoursStore().logTaskCode(prompt.value);
-    if (step.value === 3) useHoursStore().logTaskDescription(prompt.value);
-    if (step.value === 4) useHoursStore().logTaskMinutes(parseHours(prompt.value));
+
+    if (promptType.value === 'project') {
+        useProjectsStore().setProp(projectSteps[step.value], prompt.value)
+    }
+
+    if (step.value === 1) {
+        if (selectedResult.value === 'new project') {
+            promptType.value = 'project';
+            step.value = step.value+1;
+            
+            return
+        }
+        useHoursStore().logProject(results.value[selectedResult.value]);
+    }
+
+    if(step.value === 1 && !results.value[selectedResult.value].jiracode) step.value = step.value+1;
+
+    useHoursStore().setProp(hourSteps[step.value], (step.value === 4 ? parseHours(prompt.value) : prompt.value));
 
     prompt.value = '';
     step.value = step.value+1;
 
-    if (step.value > 4) {
-        useHoursStore().submitEntry()
+
+    if (step.value > 4 && promptType.value != 'project') {
+        useHoursStore().submitEntry();
+        reset();
+        emits('close');
+    }
+
+    if (step.value > 6 && promptType.value === 'project') {
+        useProjectsStore().submitProject();
         reset();
         emits('close');
     }
@@ -121,6 +189,7 @@ const parseHours = value => {
 const reset = () => {
     step.value = 1
     results.value = projects;
+    promptType.value = '';
 }
 
 defineExpose({
@@ -222,11 +291,26 @@ textarea:focus, input:focus{
 
 .results {
     border-top: 1px solid #aaa;
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 0 0 0;
     margin: 0 -1rem 0 -1rem;
 
+    table {
+        width: 100%;
+    }
+
+    tr:nth-child(even){
+        background: #333;
+    }
+
+    tr {
+        &.active {
+            background: #222;
+            color: #fff;
+        }
+    }
+
     .result {
-        span {
+        td {
             margin-right: 1rem;
         }
     }

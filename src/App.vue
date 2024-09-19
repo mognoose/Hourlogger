@@ -24,6 +24,7 @@ import LoggingModal from './components/LoggingModal.vue'
 import KeyboardEvents from './components/KeyboardEvents.vue'
 import { ref, onMounted } from 'vue';
 import { useHoursStore } from './stores/hours';
+import { useProjectsStore } from './stores/projects';
 
 const newHour = ref(false);
 const loggingModal = ref();
@@ -31,6 +32,7 @@ const loggingModal = ref();
 
 onMounted(() => {
     useHoursStore().loadFromLocal();
+    useProjectsStore().loadFromLocal();
 });
 
 const keyboardEvent = e => {

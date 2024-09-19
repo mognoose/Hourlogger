@@ -25,6 +25,9 @@ export const useHoursStore = defineStore('hours', {
             this.newHour.project = project.id;
             this.newHour.date = new Date(Date.now()).toISOString().slice(0,10);
         },
+        setProp(prop, value) {
+            this.newHour[prop] = value;
+        },
         logTaskCode(code) {
             this.newHour.task = code
         },
