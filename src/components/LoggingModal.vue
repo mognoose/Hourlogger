@@ -95,6 +95,7 @@ const onBackdropClick = event => {
 }
 
 const filterResults = () => {
+    selectedResult.value = 0;
     emits('open');
     results.value = useProjectsStore().projects.filter(p =>
         includes(p.description, prompt.value) ||
