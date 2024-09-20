@@ -203,18 +203,19 @@ defineExpose({
 
 <style scoped>
 .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100dvw;
     background: rgba(0,0,0,0);
     backdrop-filter: none;
     display: grid;
     pointer-events: none;
     transition: 300ms;
-    padding-top: 1.5rem;
+    width: 100%;
     
     &.activated {
+        width: 100dvw;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
         background: rgba(0,0,0,.5);
         backdrop-filter: blur(5px);
         pointer-events: auto;
@@ -247,6 +248,7 @@ defineExpose({
     margin: -1rem -1rem 0 -1rem;
     pointer-events: auto;
     position: relative;
+    overflow: hidden;
 
     :last-child {
         justify-self: end;
