@@ -56,5 +56,12 @@ export const useHoursStore = defineStore('hours', {
         getHoursInfo(id) {
             return this.hours.find(h=>h.id === parseInt(id));
         },
+        parseTime(mins) {
+            let h = Math.floor(mins / 60);
+            let m = mins % 60;
+            m = m < 10 ? '0' + m : m;
+        
+            return `${h > 0 ? `${h}h` : ''} ${m > 0 ? `${m}m` : ''}`;
+        }
     }
 })

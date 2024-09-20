@@ -1,25 +1,29 @@
 <template>
     <table>
-        <tr>
-        <th>Task</th>
-        <th>Description</th>
-        <th>Time</th>
-        <th>Date</th>
-        <th>Timecode</th>
-        <th>Workorder</th>
-        <th>Project</th>
-        <th>Project description</th>
-        </tr>
-        <tr @click="emits('edit', entry.id)" v-for="(entry, index) in useHoursStore().hours" :key="index">
-            <td>{{useProjectsStore().getProjectInfo(entry.project)?.jiracode}}-{{entry.task}}</td>
-            <td>{{entry.description}}</td>
-            <td>{{parseTime(entry.minutes)}}</td>
-            <td>{{entry.date}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project)?.timecode}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project)?.workorder}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project)?.project}}</td>
-            <td>{{useProjectsStore().getProjectInfo(entry.project)?.description}}</td>
-        </tr>
+        <thead>
+            <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Time</th>
+            <th>Date</th>
+            <th>Timecode</th>
+            <th>Workorder</th>
+            <th>Project</th>
+            <th>Project description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr @click="emits('edit', entry.id)" v-for="(entry, index) in useHoursStore().hours" :key="index">
+                <td>{{useProjectsStore().getProjectInfo(entry.project)?.jiracode}}-{{entry.task}}</td>
+                <td>{{entry.description}}</td>
+                <td>{{parseTime(entry.minutes)}}</td>
+                <td>{{entry.date}}</td>
+                <td>{{useProjectsStore().getProjectInfo(entry.project)?.timecode}}</td>
+                <td>{{useProjectsStore().getProjectInfo(entry.project)?.workorder}}</td>
+                <td>{{useProjectsStore().getProjectInfo(entry.project)?.project}}</td>
+                <td>{{useProjectsStore().getProjectInfo(entry.project)?.description}}</td>
+            </tr>
+        </tbody>
     </table>
 </template>
 
@@ -39,32 +43,4 @@ const emits = defineEmits(['edit'])
 </script>
 
 <style lang="css">
-table {
-  border-collapse: collapse;
-  margin: 0 auto;
-  border: 1px solid #333;
-}
-
-tr:nth-child(even) {
-    background: #333;
-}
-
-th {
-    background: #111;
-    font-weight: bold;
-}
-
-td, th {
-    padding: .5rem;
-}
-
-td {
-    opacity: 80%;
-    cursor: pointer;
-}
-
-tr:hover td{
-    opacity: 100%;
-}
-
 </style>

@@ -100,3 +100,32 @@ input {
     'Helvetica Neue',
     sans-serif;
 }
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  border: 1px solid #333;
+}
+
+tr:nth-child(even) {
+  background: #333;
+}
+
+th {
+  background: #111;
+  font-weight: bold;
+}
+
+td,
+th {
+  padding: 0.5rem;
+}
+
+td {
+  opacity: 80%;
+  cursor: pointer;
+}
+
+tr:hover td {
+  opacity: 100%;
+}

@@ -12,6 +12,7 @@
 
   <main class="container">
     <LoggedHours @edit="id => onEdit(id)" />
+    <WeekSummary />
   </main>
 
   <EditModal
@@ -26,6 +27,7 @@
 <script setup>
 import Header from './components/Header.vue'
 import LoggedHours from './components/LoggedHours.vue'
+import WeekSummary from './components/WeekSummary.vue'
 import LoggingModal from './components/LoggingModal.vue'
 import EditModal from './components/EditModal.vue'
 import KeyboardEvents from './components/KeyboardEvents.vue'
