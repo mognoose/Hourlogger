@@ -30,9 +30,9 @@
                             <td><span>{{result.workorder}}</span></td>
                         </tr>
                         <tr
-                            @mouseover="selectedResult = 'new project'"
+                            @mouseover="selectedResult = results.length"
                             @click="onSubmit()"
-                            :class="{active: 'new project' === selectedResult}"
+                            :class="{active: selectedResult === results.length}"
                         >
                             <td colspan="3"><span style="font-weight: bold;">+ Add new project</span></td>
                         </tr>
@@ -135,6 +135,16 @@ const hourSteps = [
     'minutes',
 ]
 
+const nextResult = () => {
+    if (selectedResult.value > results.value.length-1) return;
+    selectedResult.value = selectedResult.value + 1;
+}
+
+const prevResult = () => {
+    if (selectedResult.value < 1) return;
+    selectedResult.value = selectedResult.value - 1;
+}
+
 const onSubmit = () => {
 
     if (promptType.value === 'project') {
@@ -142,7 +152,9 @@ const onSubmit = () => {
     }
 
     if (step.value === 1) {
-        if (selectedResult.value === 'new project') {
+        console.log(selectedResult.value);
+        
+        if (selectedResult.value === results.value.length) {
             promptType.value = 'project';
             step.value = step.value+1;
             
@@ -195,7 +207,9 @@ const reset = () => {
 defineExpose({
     onSubmit,
     reset,
-    onFocus
+    onFocus,
+    nextResult,
+    prevResult,
 });
 
 
@@ -295,6 +309,7 @@ textarea:focus, input:focus{
     border-top: 1px solid #aaa;
     padding: 1rem 0 0 0;
     margin: 0 -1rem 0 -1rem;
+    text-align: left;
 
     table {
         width: 100%;

@@ -45,6 +45,10 @@ onMounted(() => {
 });
 
 const keyboardEvent = e => {
+
+  if(e.which === 38) loggingModal.value.prevResult();
+  if(e.which === 40) loggingModal.value.nextResult();
+  
   if(e.which === 13) {
     newHour.value ? loggingModal.value.onSubmit() : newHour.value = true;
     loggingModal.value.onFocus();
