@@ -1,0 +1,11 @@
+{
+  "name": "Hourlogger",
+  "short_name": "Hourlogger",
+  "theme_color": "#333333",
+  "background_color": "#222222",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "https://hourlogger.heroku.app",
+  "description": "Tool to log hours",
+  "orientation": "any"
+}
