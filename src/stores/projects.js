@@ -33,7 +33,11 @@ export const useProjectsStore = defineStore('projects', {
           localStorage.setItem('projects', JSON.stringify(this.projects));
       },
       getProjectInfo(project) {
-        return this.projects.find(p => p.id === project)
+        return this.projects.find(p => p.id === project);
+      },
+      getProjects() {
+        this.loadFromLocal();
+        return this.projects;
       },
     }
 })

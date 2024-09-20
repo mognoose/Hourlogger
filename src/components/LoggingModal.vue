@@ -61,8 +61,8 @@ const emits = defineEmits(['open', 'close', 'submit']);
 const promptRef = ref();
 const prompt = ref('');
 const promptType = ref('');
-const results = ref(useProjectsStore().projects);
-const selectedResult = ref(0);
+const results = ref(useProjectsStore().getProjects());
+const selectedResult = ref(1-1);
 const step = ref(1);
 
 const placeholder = [
