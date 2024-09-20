@@ -60,14 +60,14 @@ const keyboardEvent = e => {
     loggingModal.value.onFocus();
   }
   if(e.which === 27) {
-    newHour.value = false
+    editEntryId.value = false;
+    newHour.value = false;
     loggingModal.value.reset();
   };
 }
 
 const onEdit = id => {
   editEntryId.value = id.toString();
-  console.log('editEntryId', editEntryId.value);
 }
 </script>
 
